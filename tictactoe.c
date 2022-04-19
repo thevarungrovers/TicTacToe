@@ -1,11 +1,19 @@
 /*
-Varun Grover
-- 
+Varun Grover @LaSalleCollege
+Student ID - 2130884
+
+Kavita @laSalleCollege
+Student ID - 2132687
+
+Algorithm and Programming - Semester 1
+
+Final Project
+tic tac toe game
 */
 
 #include<stdio.h>
 #include<stdbool.h>
-
+#include<stdlib.h>
 
 typedef struct coordinates{
     int x,y;
@@ -14,16 +22,21 @@ typedef struct coordinates{
 char char_grid[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
 char player1_choice, player2_choice;
 
-void code_runner(int );
+void code_runner(int);
 void print_grid();
 void checking_space(int, int, int);
 coordinates get_coordinates(int move);
 int take_input(int);
-int terminator(int);
+int terminator();
 
 
 int main(){
-    
+
+    system("cls"); // clear screen 
+
+    printf("\n\t\tWELCOME TO THE GAME");
+    printf("\n\t\tTIC TAC TOE");
+
     input:
     // input for X or O
     printf("\nEnter the choice for player 1 ( X or O ): ");
@@ -51,16 +64,18 @@ int main(){
     int step, player_turn;
 
     for(step=1; step<10; step++){
-        // int_grid_print();
-
+        // getting player turn based on step
         player_turn = (step%2) != 0 ?  1 :  2;
+        
         code_runner(player_turn);
 
+        // after step 9 - game ties
         if(step==9){
             printf("\nTIES");
             break;
         }
 
+        // after 3 steps - start checking the winning condition
         if(step>3){
             int result = terminator(player_turn);
             if(result == 1){ // one wins
@@ -75,7 +90,7 @@ int main(){
             
         }
     }
-  
+
     return 0;
 }
 
@@ -86,15 +101,13 @@ void code_runner(int player_turn){
     // taking input
     int move = take_input(player_turn);
 
-    // GETTING CO-ORDINATES
+    // getting co-ordinates of the move
     coordinates c1;
     c1 = get_coordinates(move); 
-    /* printf("x = %d y = %d", c1.x, c1.y); */
 
-    // checking space available
+    // checking space available and saving the input, if available
     checking_space(c1.x, c1.y, player_turn);
 }
-
 
 void print_grid(){
     printf("\n\n");
@@ -112,6 +125,7 @@ void print_grid(){
 
 int take_input(int player){
     int move;
+
     do{
         printf("\nPlease enter the move for player %d : ", player);
         scanf("%d", &move);
@@ -124,14 +138,9 @@ void checking_space(int x, int y, int player_turn){
     // changing the O and X based on player 1 or 2
     char input = player_turn == 1 ? player1_choice : player2_choice;
 
-    // sum values
-    int sum_value = player_turn == 1 ? 5 : 2; // player 1 = 5 and player 2 = 2
-
     // checking the condition to enter X/O in grid
     if((char_grid[x][y] >= 49) && (char_grid[x][y] <= 57) ){ // ASCII value of 1 = 49 and 9 = 57
-        char_grid[x][y] = input;
-        // int_grid[x][y] = sum_value;
-        // printf("\nint_grid[%d][%d] = %d\n", x,y,int_grid[x][y]);
+        char_grid[x][y] = input; // saving the input in array
     }
     else{
         printf("\nWrong move...... Space already filled!!");
@@ -145,41 +154,43 @@ coordinates get_coordinates(int move){
     coordinates c;
 
     switch(move){
-        case 1: c.x=0, c.y=0;
+        case 1: c.x=0, c.y=0; // 1
             break;
-        case 2: c.x=0, c.y=1;
+        case 2: c.x=0, c.y=1; // 2
             break;
-        case 3: c.x=0, c.y=2;
+        case 3: c.x=0, c.y=2; // 3
             break;
-        case 4: c.x=1, c.y=0;
+        case 4: c.x=1, c.y=0; // 4
             break;
-        case 5: c.x=1, c.y=1;
+        case 5: c.x=1, c.y=1; // 5
             break;
-        case 6: c.x=1, c.y=2;
+        case 6: c.x=1, c.y=2; // 6
             break;
-        case 7: c.x=2, c.y=0;
+        case 7: c.x=2, c.y=0; // 7
             break;
-        case 8: c.x=2, c.y=1;
+        case 8: c.x=2, c.y=1; // 8
             break;
-        case 9: c.x=2, c.y=2;
+        case 9: c.x=2, c.y=2; // 9
             break;
     }
     return c; // returns 2 variable (x and y)
 }
 
-int terminator(int player_turn){
+int terminator(){
     int result = 0; // continue
 
     for(int i=0; i<3; i++){
         for(int j=0; j<3; j++){
             int sum_row=0, col_sum=0, rdiagonal_sum=0, ldiagonal_sum =0; 
-            ldiagonal_sum = char_grid[0][2] + char_grid[1][1] + char_grid[2][0];
+            
+            // calculations to terminate the game
             sum_row += char_grid[i][j];
             col_sum += char_grid[j][i];
+            ldiagonal_sum = char_grid[0][2] + char_grid[1][1] + char_grid[2][0];
             rdiagonal_sum += char_grid[i][i];
-
+            
+            // conditions
             if(sum_row==264 || sum_row==237 || col_sum==264 || col_sum== 237 || rdiagonal_sum==264 || rdiagonal_sum==237 || ldiagonal_sum==237 || ldiagonal_sum==264){
-                printf("\nrow = %d\ncol = %d\nld = %d\nrd = %d", sum_row, col_sum, rdiagonal_sum, ldiagonal_sum);
                 result = 1; // one player wins
                 break;
             }
