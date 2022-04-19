@@ -84,7 +84,6 @@ int main(){
                 break;
             }
             else if(result == 0){ // continue
-                print_grid();
                 continue;
             }
             
